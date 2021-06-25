@@ -13,7 +13,7 @@ Current Program needs to be run game by game
 Run:
 > Python3 Main.py
 
-SLP is the perceptron class
+SLP.py is the perceptron class
 
 It take the inputs: 
 
@@ -30,16 +30,16 @@ It take the inputs:
 
 It will then create a confidence reading of winning the next game. 
 
-Data is stored *locally* using sqlite but have provided a csv of round 1
+Data is stored *locally* using sqlite but have provided a csv of round 1 so you will need to adjust code accordingly
 
 Input team names with capital letter. 
 Highest confidence is the predicted winner. 
 
 *****
-
+*****
 Future Iterations: 
 
-*****
+
 Will load each round data and use cumulative round data to predict next round
 
 Will move to cloud DB
