@@ -1,4 +1,5 @@
 *****
+#**NRL FOOTY TIPPER** 
 This is a single layer perceptron
 
 Currently is a proof of concept using data from round 1 of NRL 2020
