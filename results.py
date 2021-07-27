@@ -1,6 +1,7 @@
 import sqlite3
 import numpy as np
 
+
 # connect to sql db
 round_no = int(input("What round are you entering?"))
 prev_round = str(round_no - 1)
@@ -88,6 +89,8 @@ try:
 except:
     print("results_rd_" + str(round_no) + " already exists")
 
+
+# bring the results from last week forward
 if round_no > 1:
     for row in cur.execute(f'''SELECT * FROM results_rd_{prev_round}'''):
         result.append(np.array(row))
@@ -97,7 +100,13 @@ for x in range(len(result)):
     cur.execute(f'''
                 UPDATE {this_ladder} SET Prev_round = {result[x][1]} WHERE Team ='{result[x][0]}'
                 ''')
+    cur.execut(f'''
+                UPDATE {this_ladder} SET Away_Wins = {result[x]}
+                ''')
     con.commit()
+
+for x in range(len(result)):
+
 
 
 for i in range(num_matches):
@@ -130,7 +139,6 @@ for i in range(num_matches):
         con.commit()
 
     else:
-        print("lol")
         # Draw
         # update losses for both
         cur.execute(f'''
@@ -147,5 +155,6 @@ for i in range(num_matches):
         # update ladder with home_losses with +1 for home_team
         cur.execute(f'''UPDATE {this_ladder} SET Home_Losses = Home_Losses +1 WHERE Team ='{home_team}'
                    ''')
+
 
 
