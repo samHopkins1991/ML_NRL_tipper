@@ -19,9 +19,9 @@ def load_training_data():
     global raw_training_inputs
     global processed_inputs
     cwd = os.getcwd()
-    db_loc = '/home/samh/code/DB'
+    db_loc = '/home/samh/code/DB/'
     os.chdir(db_loc)
-    con = sqlite3.connect('NRL_2021.db')
+    con = sqlite3.connect('nrl_2020.db')
     cur = con.cursor()
 
     for row in cur.execute('SELECT * FROM Ladder_1 ORDER BY ROWID'):
@@ -40,7 +40,7 @@ def load_labels():
     cwd = os.getcwd()
     db_loc = '/home/samh/code/DB'
     os.chdir(db_loc)
-    con = sqlite3.connect('NRL_2021.db')
+    con = sqlite3.connect('nrl_2020.db')
     cur = con.cursor()
 
     for row in cur.execute('SELECT * FROM results_rd_1 ORDER BY ROWID'):
@@ -67,7 +67,7 @@ def t1():
     cwd = os.getcwd()
     db_loc = '/home/samh/code/DB'
     os.chdir(db_loc)
-    con = sqlite3.connect('NRL_2021.db')
+    con = sqlite3.connect('nrl_2020.db')
     cur = con.cursor()
 
     print("Enter the team name")
@@ -96,7 +96,7 @@ def t2():
     cwd = os.getcwd()
     db_loc = '/home/samh/code/DB'
     os.chdir(db_loc)
-    con = sqlite3.connect('NRL_2021.db')
+    con = sqlite3.connect('nrl_2020.db')
     cur = con.cursor()
 
     print("Enter the team name")
