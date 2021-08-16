@@ -2,7 +2,7 @@ from SLP import Perceptron
 import numpy as np
 import sqlite3
 import os
-import csv
+import locations
 num_rounds = 1
 num_teams = 16
 num_stat_columns = 10 #0 counts

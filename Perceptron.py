@@ -2,7 +2,7 @@ from SLP import Perceptron
 import numpy as np
 import sqlite3
 import os
-import csv
+import locations
 num_rounds = 1
 num_teams = 16
 num_stat_columns = 10 #0 counts
@@ -19,7 +19,7 @@ def load_training_data():
     global raw_training_inputs
     global processed_inputs
     cwd = os.getcwd()
-    db_loc = '/home/samh/code/DB'
+    db_loc = '/home/samh/code/python/nrl_2020'
     os.chdir(db_loc)
     con = sqlite3.connect('nrl_2020.db')
     cur = con.cursor()
@@ -38,8 +38,8 @@ def load_labels():
     global processed_labels
     global raw_labels
     cwd = os.getcwd()
-    # db_loc = '/home/samh/code/DB'
-    # os.chdir(db_loc)
+    db_loc = '/home/samh/code/python/nrl_2020'
+    os.chdir(db_loc)
     con = sqlite3.connect('nrl_2020.db')
     cur = con.cursor()
 
@@ -64,9 +64,9 @@ def t1():
     t1_confidence = 0.00
     team_inputs = []
 
-    # cwd = os.getcwd()
-    # db_loc = '/home/samh/code/DB'
-    # os.chdir(db_loc)
+    cwd = os.getcwd()
+    db_loc = '/home/samh/code/python/nrl_2020'
+    os.chdir(db_loc)
     con = sqlite3.connect('nrl_2020.db')
     cur = con.cursor()
 
@@ -94,7 +94,7 @@ def t2():
     team_inputs = []
 
     cwd = os.getcwd()
-    db_loc = '/home/samh/code/DB'
+    db_loc = '/home/samh/code/python/nrl_2020'
     os.chdir(db_loc)
     con = sqlite3.connect('nrl_2020.db')
     cur = con.cursor()

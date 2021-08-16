@@ -1,6 +1,9 @@
 import sqlite3
 import numpy as np
+import os
 
+db_loc = '/home/samh/code/python/nrl_2020'
+os.chdir(db_loc)
 
 round_no = int(input("What round are you entering?"))
 prev_round = str(round_no - 1)
@@ -40,6 +43,7 @@ ladder_command = new_sql_ladder + '''  (
     Points      INTEGER,
     Away_Wins   INTEGER,
     Home_Losses INTEGER,
+    Prev_round INTEGER,
     PRIMARY KEY (
         Team
     )
@@ -49,7 +53,7 @@ results_command = new_sql_results + '''(
     Team  TEXT    REFERENCES results_rd_1 (Team),
     Result INTEGER,
     PRIMARY KEY (
-        Teams
+        Team
     )
 );'''
 
@@ -92,6 +96,8 @@ try:
     cur.execute(ladder_command)
 except:
     print("Ladder_" + str(round_no) + " already exists")
+
+
 try:
     cur.execute(results_command)
 except:
@@ -100,27 +106,25 @@ except:
 
 # bring the results from last week forward
 if round_no > 1:
-    for row in cur.execute(f'''SELECT * FROM results_rd_{prev_round}'''):
+    for row in cur.execute(f'''SELECT Result FROM results_rd_{prev_round}'''):
         result.append(np.array(row))
 
-for x in range(len(result)):
-    print(result[x][0])
-    cur.execute(f'''
-                UPDATE {this_ladder} SET Prev_round = {result[x][1]} WHERE Team ='{result[x][0]}'
-                ''')
-    con.commit()
-
-
-
-for x in range(len(result)):
-    ext_cols = '''
-                 Away_Wins = 
-        Home_Losses,
-        Home_Away,
-        Prev_round
-        '''
-
-    cur.execute(f'''UPDATE {this_ladder} SET {ext_cols}={row} WHERE Team ='{teams[x]}'
-    ''')
-    con.commit()
+    for x in range(len(result)):
+        print(result[x][0])
+        cur.execute(f'''
+                    UPDATE {this_ladder} SET Prev_round = {result[x][1]} WHERE Team ='{result[x][0]}'
+                    ''')
+        con.commit()
+    for x in range(len(result)):
+        ext_cols = '''
+            Away_Wins, 
+            Home_Losses,
+            Home_Away,
+            Prev_round
+            '''
+        print(f'''UPDATE {this_ladder} SET {ext_cols}={row} WHERE Team ='{teams[x]}'
+        ''')
+        cur.execute(f'''UPDATE {this_ladder} SET {ext_cols}={row} WHERE Team ='{teams[x]}'
+        ''')
+        con.commit()
 
