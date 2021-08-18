@@ -1,5 +1,6 @@
 import sqlite3
 import numpy as np
+from icecream import ic
 import os
 
 db_loc = '/home/samh/code/python/nrl_2020'
@@ -104,27 +105,43 @@ except:
     print("results_rd_" + str(round_no) + " already exists")
 
 
+if round_no > 1:
+    for row in cur.execute(f"SELECT * FROM Ladder_{prev_ladder}"):
+        new_table.append(np.array(row))
+
+
+
+
+
+
 # bring the results from last week forward
 if round_no > 1:
-    for row in cur.execute(f'''SELECT Result FROM results_rd_{prev_round}'''):
+    print(f'''SELECT Result FROM results_rd_{prev_round}''')
+    for row in cur.execute(f'''SELECT * FROM results_rd_{prev_round}'''):
         result.append(np.array(row))
 
     for x in range(len(result)):
-        print(result[x][0])
+        ic(result[x][0])
+        print(f'''
+                    UPDATE {this_ladder} SET Prev_round = {result[x]} WHERE Team ='{result[x][0]}'
+                    ''')
         cur.execute(f'''
                     UPDATE {this_ladder} SET Prev_round = {result[x][1]} WHERE Team ='{result[x][0]}'
                     ''')
         con.commit()
     for x in range(len(result)):
         ext_cols = '''
-            Away_Wins, 
+            Away_Wins,
             Home_Losses,
             Home_Away,
             Prev_round
             '''
-        print(f'''UPDATE {this_ladder} SET {ext_cols}={row} WHERE Team ='{teams[x]}'
+        print(f''' this is it *** UPDATE {this_ladder} SET {ext_cols}={row} WHERE Team ='{teams[x]}'
         ''')
-        cur.execute(f'''UPDATE {this_ladder} SET {ext_cols}={row} WHERE Team ='{teams[x]}'
-        ''')
-        con.commit()
+    #     cur.execute(f'''UPDATE {this_ladder} SET {ext_cols}={row} WHERE Team ='{teams[x]}'
+    #     ''')
+    #     con.commit()
+
+#     the above code should set the ext cols as the previous rounds ext cols.
+#     then we can load the results. will need to create another file to do the predicitons.
 
