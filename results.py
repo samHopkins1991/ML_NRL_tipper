@@ -147,5 +147,4 @@ for i in range(num_matches):
         # update ladder with home_losses with +1 for home_team
         cur.execute(f'''UPDATE {this_ladder} SET Home_Losses = Home_Losses +1 WHERE Team ='{home_team}'
                    ''')
-
-
+    con.commit()

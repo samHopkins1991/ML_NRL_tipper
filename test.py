@@ -15,7 +15,7 @@ this_results = "results_rd_" +str(round_no)
 
 num_matches = int(input("How many matches were there this round?"))
 
-prev_table = []
+prev_table_short = []
 new_table = []
 result = []
 prev_ext_table = []
@@ -28,7 +28,22 @@ ext_cols = '''
     Prev_round
     '''
 
+other_cols = '''
+             Wins,
+            Losses,
+            Away_Wins,
+            Home_Losses,
+            Home_Away
+            '''
 
+short_cols = '''
+            Team,
+            Wins,
+            Losses,
+            Away_Wins,
+            Home_Losses,
+            Home_Away
+            '''
 con = sqlite3.connect('nrl_2020.db')
 cur = con.cursor()
 
@@ -47,7 +62,8 @@ ladder_command = new_sql_ladder + '''  (
     Points      INTEGER,
     Away_Wins   INTEGER,
     Home_Losses INTEGER,
-    Prev_round INTEGER,
+    Home_Away   INTEGER,
+    Prev_round  INTEGER,
     PRIMARY KEY (
         Team
     )
@@ -107,61 +123,59 @@ try:
 except:
     print("results_rd_" + str(round_no) + " already exists")
 
-print(len(prev_table))
+
+
+# This brings forward wins, losses away wins, home losses, home_away
+# Becuase they are updated in other scripts. Other ladder info will be dropped in through sqlite studio
+
 if round_no > 1:
-    print(f"SELECT {cols} FROM {prev_ladder}")
-    for row in cur.execute(f"SELECT {cols} FROM {prev_ladder}"):
-        prev_table.append(np.array(row))
+    print(f"SELECT {short_cols} FROM {prev_ladder}")
+    for row in cur.execute(f"SELECT {short_cols} FROM {prev_ladder}"):
+        prev_table_short.append(np.array(row))
+
+##for loop length of teams
+## inner loop loops through cols to update, with values from
+
+cols = ['Wins',
+        'Losses',
+        'Away_Wins',
+        'Home_Losses',
+        'Home_Away']
+values = []
+for x in range(len(prev_table_short)):
+    values.append(np.array(prev_table_short[x][1:]))
+
+for x in range(len(teams)):
+    for col in range(len(cols)):
+        print(prev_table_short[x])
+        print(f'UPDATE {this_ladder} SET {cols[col]} = {values[x][col]} WHERE Team = {prev_table_short[x][0]}')
+        cur.execute(f'''
+        UPDATE {this_ladder} SET {cols[col]} = {values[x][col]} WHERE Team ='{prev_table_short[x][0]}'
+                    ''')
+        con.commit()
 
 
-print(len(prev_table))
-print(prev_table[3][2])
+## this should be done - need to use results.py to update custom metrics.
+## inputting matchups will update home_away
 
-for x in range(len(prev_table)):
-    for y in range(len(prev_table[x])):
-        print(prev_table[x][y])
-        cur.execute(f'''INSERT INTO {this_ladder} ({cols}) ''')
+# prints the whole team row
+print(prev_table_short[0])
 
+# prints everything except the name
+print(prev_table_short[0][1:])
 
-
-    # print("Prev LAdder: " + prev_ladder)
-    # print("New Table: " +new_table)
-    # for x in range(len(new_table)):
-    #     print("this is the insert row: "+ new_table[x])
-    #     print("This is the previous ladder: "+ prev_ladder[x])
+#prints just the name of the team
+print(prev_table_short[0][0])
 
 
 
+# this executes inserting the whole table
+# cur.executemany(f"INSERT INTO {this_ladder} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", prev_table)
 
 
 
-# bring the results from last week forward
-# if round_no > 1:
-#     print(f'''SELECT Result FROM results_rd_{prev_round}''')
-#     for row in cur.execute(f'''SELECT * FROM results_rd_{prev_round}'''):
-#         result.append(np.array(row))
-#
-#     for x in range(len(result)):
-#         ic(result[x][0])
-#         print(f'''
-#                     UPDATE {this_ladder} SET Prev_round = {result[x]} WHERE Team ='{result[x][0]}'
-#                     ''')
-#         cur.execute(f'''
-#                     UPDATE {this_ladder} SET Prev_round = {result[x][1]} WHERE Team ='{result[x][0]}'
-#                     ''')
-#         con.commit()
-#     for x in range(len(result)):
-#         ext_cols = '''
-#             Away_Wins,
-#             Home_Losses,
-#             Home_Away,
-#             Prev_round
-#             '''
-#         print(f''' this is it *** UPDATE {this_ladder} SET {ext_cols}={row} WHERE Team ='{teams[x]}'
-#         ''')
-    #     cur.execute(f'''UPDATE {this_ladder} SET {ext_cols}={row} WHERE Team ='{teams[x]}'
-    #     ''')
-    #     con.commit()
 
-#     the above code should set the ext cols as the previous rounds ext cols.
-#     then we can load the results. will need to create another file to do the predicitons.
+
+
+
+

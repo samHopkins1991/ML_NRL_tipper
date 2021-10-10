@@ -11,7 +11,7 @@ Can predict at 75% accuracy the outcomes of round 2
 Current Program needs to be run game by game
 
 Run:
-> Python3 Main.py
+> Python3 Perceptron.py
 
 SLP.py is the perceptron class
 
@@ -30,7 +30,7 @@ It take the inputs:
 
 It will then create a confidence reading of winning the next game. 
 
-Data is stored *locally* using sqlite but have provided a csv of round 1 so you will need to adjust code accordingly
+HAve moved away from sql database, will only have csv's
 
 Input team names with capital letter. 
 Highest confidence is the predicted winner. 
@@ -42,9 +42,12 @@ Future Iterations:
 
 Will load each round data and use cumulative round data to predict next round
 
+Will incorporate a webscraper to fetch data 
+
 Will move to cloud DB
 
 Will have GUI to select entire round, as opposed to game by game
+
 *****
 
 
