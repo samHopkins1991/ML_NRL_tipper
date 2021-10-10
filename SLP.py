@@ -6,10 +6,11 @@ class Perceptron(object):
         self.epoch = epoch
         self.learning_rate = learning_rate
         self.weights = np.zeros(no_inputs + 1)
+        self.weights = self.weights.astype(float)
 
     def predict(self, inputs):
         summation = np.dot(inputs, self.weights[1:]) + self.weights[0]
-        # print(summation)
+        print(summation)
         if summation > 0:
             activation = 1
         else:
