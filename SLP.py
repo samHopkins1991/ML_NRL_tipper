@@ -10,7 +10,6 @@ class Perceptron(object):
 
     def predict(self, inputs):
         summation = np.dot(inputs, self.weights[1:]) + self.weights[0]
-        print(summation)
         if summation > 0:
             activation = 1
         else:
