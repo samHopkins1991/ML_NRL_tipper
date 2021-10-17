@@ -1,9 +1,11 @@
 import requests
 import numpy as np
+import os
 import csv
 from bs4 import BeautifulSoup
 
-
+wd = 'csv'
+os.chdir(wd)
 
 for x in range(20):
     URL = 'https://footyforecaster.com/NRL/Ladder/2020_Round_'
@@ -50,8 +52,8 @@ for x in range(20):
 
     print(ladder)
     with open(file, 'w') as csv_file:
-        writer = csv.writer(csv_file, fieldnames=headers)
-        writer.writeheader()
+        writer = csv.writer(csv_file, delimiter=',')
+        writer.writerow(headers)
         writer.writerows(ladder)
 
 
